@@ -99,6 +99,17 @@ class Configatron
       end
     end
 
+    def save!
+      ::Configatron.config.redis.set "configatron_#{::Rails.application.class.parent_name}_#{::Rails.env}", to_h.to_json
+    end
+
+    def load_from_redis!
+      return unless ::Configatron.config
+      configure_from_hash ::JSON.parse(
+        ::Configatron.config.redis.get("configatron_#{::Rails.application.class.parent_name}_#{::Rails.env}")
+      )
+    end
+
     # So that puts works (it expects the object to respond to to_ary)
     def to_ary
       nil

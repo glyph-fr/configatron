@@ -26,6 +26,7 @@ class Configatron::RootStore < BasicObject
 
   def reset!
     @store = ::Configatron::Store.new(self)
+    @store.load_from_redis!
   end
 
   def temp(&block)

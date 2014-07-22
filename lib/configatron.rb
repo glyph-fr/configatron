@@ -13,6 +13,22 @@ require 'configatron/delayed'
 require 'configatron/dynamic'
 
 class Configatron
+  class << self
+    attr_accessor :config
+  end
+
+  def self.configure
+    self.config ||= Configuration.new
+    yield(config)
+  end
+
+  class Configuration
+    attr_accessor :redis
+
+    def initialize
+      @redis = ''
+    end
+  end
 end
 
 # NO_EXT gets defined when you require "configatron/core", which
