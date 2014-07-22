@@ -105,6 +105,8 @@ class Configatron
 
     def load_from_redis!
       return unless ::Configatron.config
+      return unless ::Configatron.config.redis.get("configatron_#{::Rails.application.class.parent_name}_#{::Rails.env}")
+
       configure_from_hash ::JSON.parse(
         ::Configatron.config.redis.get("configatron_#{::Rails.application.class.parent_name}_#{::Rails.env}")
       )
