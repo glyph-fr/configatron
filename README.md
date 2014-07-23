@@ -1,16 +1,13 @@
 # Configatron
-[![Build Status](https://travis-ci.org/markbates/configatron.png)](https://travis-ci.org/markbates/configatron) [![Code Climate](https://codeclimate.com/github/markbates/configatron.png)](https://codeclimate.com/github/markbates/configatron)
 
 Configatron makes configuring your applications and scripts incredibly easy. No longer is a there a need to use constants or global variables. Now you can use a simple and painless system to configure your life. And, because it's all Ruby, you can do any crazy thing you would like to!
-
-One of the more important changes to V3 is that it now resembles more a `Hash` style interface. You can use `[]`, `fetch`, `each`, etc... Actually the hash notation is a bit more robust since the dot notation won't work for a few property names (a few public methods from `Configatron::Store` itself).
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'configatron'
+gem 'configatron', github: 'glyph-fr/configatron'
 ```
 
 And then execute:
@@ -19,19 +16,15 @@ And then execute:
 $ bundle
 ```
 
-Or install it yourself as:
+## Rails
 
-```bash
-$ gem install configatron --pre
+Configatron works great with Rails. Use the built-in generate to generate an initializer file and a series of environment files for you to use to configure your applications.
+
+``` bash
+$ rails generate configatron:install
 ```
 
 ## Usage
-
-Once installed you just need to require it:
-
-```ruby
-require 'configatron'
-```
 
 ### Simple
 
@@ -48,21 +41,6 @@ configatron.database.url # => "postgres://localhost/foo"
 ```
 
 Voila! Simple as can be.
-
-Now you're saying, what if I want to have a 'default' set of options, but then override them later, based on other information? Simple again. Let's use our above example. We've configured our `database.url` option to be `postgres://localhost/foo`. The problem with that is that is our production database url, not our development url. Fair enough, all you have to do is redeclare it:
-
-```ruby
-configatron.database.url = "postgres://localhost/foo_development"
-```
-
-becomes:
-
-```ruby
-configatron.email # => "me@example.com"
-configatron.database.url # => "postgres://localhost/foo_development"
-```
-
-Notice how our other configuration parameters haven't changed? Cool, eh?
 
 ### Hash/YAML
 
@@ -239,34 +217,6 @@ configatron.foo # => 'FOO'
 
 configatron.bar # => raises Configatron::UndefinedKeyError
 configatron.bar = 'BAR' # => raises Configatron::LockedError
-```
-
-## Rails
-
-Configatron works great with Rails. Use the built-in generate to generate an initializer file and a series of environment files for you to use to configure your applications.
-
-``` bash
-$ rails generate configatron:install
-```
-
-Configatron will read in the `config/configatron/defaults.rb` file first and then the environment specific file, such as `config/configatron/development.rb`. Settings in the environment file will merge into and replace the settings in the `defaults.rb` file.
-
-### Example
-
-```ruby
-# config/configatron/defaults.rb
-configatron.letters.a = 'A'
-configatron.letters.b = 'B'
-```
-
-```ruby
-# config/configatron/development.rb
-configatron.letters.b = 'BB'
-configatron.letters.c = 'C'
-```
-
-```ruby
-configatron.to_h # => {:letters=>{:a=>"A", :b=>"BB", :c=>"C"}}
 ```
 
 ## Contributing
